@@ -1,0 +1,94 @@
+GlowScript 3.1 VPython
+scene.width=800
+scene.height=550
+scene.background=color.black
+scene.autoscale=0
+start = "First, check the instruction tabs."
+lab = label(pos = vec(0,9,0), text = start)
+import random
+
+box(pos=vector(-12,0,0),size=vector(4,10,4))
+
+button1 = sphere(pos=vector(-10,2,0),radius=0.5,color=color.blue)
+button2 = sphere(pos=vector(-10,4,0),radius=0.5,color=color.green)
+button3 = sphere(pos=vector(-10,-2,0),radius=0.5,color=color.red)
+button4 = sphere(pos=vector(-10,-4,0),radius=0.5,color=color.yellow)
+button5 = box(pos=vector(-10,0,0),size=vector(1,1,1))
+
+buttonlist=[button1,button2,button3,button4]
+
+shapelist = []
+
+def create_shape(location):
+  shape=random.randint(1,6)
+  l=box(pos=location,size=vector(shape,shape,shape))
+  shapelist.append(l)
+
+def delete_shape(obj):
+  obj.visible=0
+  shapelist.remove(obj)
+
+def color_all_shape():
+  shape=scene.mouse.pick
+  for l in shapelist:
+    if shape==button1:
+      l.color=color.blue
+    elif shape==button2:
+      l.color=color.green
+    elif shape==button3:
+      l.color=color.red
+    elif shape==button4:
+      l.color=color.yellow
+
+def delete_all_shape():
+  for l in shapelist:
+    l.visible=False
+  shapelist.remove(obj)
+def processClick():
+  j=scene.mouse.pick
+  shape=scene.mouse.pick
+  pick=scene.mouse.pick
+  loc = scene.mouse.pos
+  if pick:
+    if pick in shapelist:
+      delete_shape(pick)
+    elif pick in buttonlist:
+      color_all_shape()
+    elif pick==button5:
+      delete_all_shape()
+  else:
+    create_shape(loc)
+
+def color_shape(col):
+  scene.mouse.pick.color=col
+
+
+def processKeys(ev):
+  print(ev.key)
+  k=keysdown()
+  print(k)
+  if k=="r":
+    scene.unbind("click",processClick)
+    scene.waitfor("click")
+    color_shape(color.red)
+    scene.bind("click",processClick)
+  elif k=="g":
+    scene.unbind("click",processClick)
+    scene.waitfor("click")
+    color_shape(color.green)
+    scene.bind("click",processClick)
+  elif k=="b":
+    scene.unbind("click",processClick)
+    scene.waitfor("click")
+    color_shape(color.blue)
+    scene.bind("click",processClick)
+  elif k=="y":
+    scene.unbind("click",processClick)
+    scene.waitfor("click")
+    color_shape(color.yellow)
+    scene.bind("click",processClick)
+
+scene.bind("click",processClick)
+scene.bind('keydown',processKeys)
+
+

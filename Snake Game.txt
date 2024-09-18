@@ -1,0 +1,112 @@
+GlowScript 3.1 VPython
+scene.width=500
+scene.height=500
+scene.background=color.black
+# scene.camera.pos=vec(0,-7,0)
+scene.userspin = False
+scene.userzoom = False
+
+
+start = "First, check the instruction tab."
+lab = label(pos = vec(0,12,0), text = start)
+import random
+scorecount=0
+start1 = "Ｓｃｏｒｅ=" + scorecount
+lab1 = label(pos = vec(0,8.5,2), height=20,text = start1, font='serif')
+#structure
+b=box(pos=vector(0,0,-1),axis=vector(0,0,0),size=vector(28,20,0),color=color.green, texture='https://i.imgur.com/2XFEEtZ.jpg')
+Wall1=box(pos=vector(-15,0,0),axis=vector(0,0,0),size=vector(2,20,2),color=color.green)
+wall2=box(pos=vector(15,0,0),axis=vector(0,0,0),size=vector(2,20,2),color=color.green)
+wall3=box(pos=vector(0,-9,0),axis=vector(0,5,0),size=vector(2,28,2),color=color.green)
+wall4=box(pos=vector(0,9,0),axis=vector(0,5,0),size=vector(2,28,2),color=color.green)
+
+#Snake
+shapelist = []
+head=box(pos=vector(0,0,0),length=1, height=1, width=1, texture='https://i.imgur.com/TZyddPh.jpg')
+shapelist.append(head)
+
+global food
+#creating food
+def create_food():
+  foodx=random.randint(-12,12)
+  foody=random.randint(-7,7)
+  j=box(pos=vec(foodx,foody,0), size=vector(1,1,1),color=color.red)
+  return j
+food=create_food()
+ 
+global piece  
+#Making the snake eat and grow
+def grow_snake():
+  global scorecount
+  if head.pos.x==food.pos.x and y==1:
+    piece=box(pos=vector(food.pos.x,food.pos.y-1,0),length=1, height=1, width=1, texture='https://i.imgur.com/8sI2MUS.jpg')
+    shapelist.append(piece)
+  elif head.pos.x==food.pos.x and y==-1:
+    piece1=box(pos=vector(food.pos.x,food.pos.y+1,0),length=1, height=1, width=1, texture='https://i.imgur.com/8sI2MUS.jpg')
+    shapelist.append(piece1)
+  elif head.pos.x==food.pos.x and x==-1:
+    piece2=box(pos=vector(food.pos.x+1,food.pos.y,0),length=1, height=1, width=1, texture='https://i.imgur.com/8sI2MUS.jpg')
+    shapelist.append(piece2)
+  elif head.pos.x==food.pos.x and x==+1:
+    piece3=box(pos=vector(food.pos.x-1,food.pos.y,0),length=1, height=1, width=1, texture='https://i.imgur.com/8sI2MUS.jpg')
+    shapelist.append(piece3)
+  scorecount+=1
+  lab1.text="Ｓｃｏｒｅ=" + scorecount
+
+#Stopping the snake when it hit itself
+def hit_itself():
+  shapelist.remove(head)
+  for piece in shapelist:
+    if piece.pos==head.pos:
+      shapelist.insert(0,head)
+      return True
+  shapelist.insert(0,head)
+  return False
+
+#making the pieces move
+def move_snake(shapelist):
+  l=len(shapelist)
+  for i in range(l-1,0,-1):
+    shapelist[i].pos=shapelist[i-1].pos
+  head.pos.x+=x
+  head.pos.y+=y
+
+x=0
+y=0
+def processKeys(ev):
+  global x
+  global y
+  k=ev.key
+  print(k)
+  if k=="w" and y!=-1:
+    y=1
+    x=0
+  elif k=="s" and y!=1:
+    y=-1
+    x=0
+  elif k=="a" and x!=1:
+    x=-1
+    y=0
+  elif k=="d" and x!=-1:
+    x=1
+    y=0
+scene.bind('keydown',processKeys)
+while True:
+  rate(12)
+  move_snake(shapelist)
+  if hit_itself():
+    for shape in shapelist:
+      shape.visible=0
+    start = "¤ＧａｍｅＯｖｅｒ¤"
+    lab = label(pos = vec(0,0,2), text = start, font='serif')
+  if head.pos==food.pos:
+    grow_snake()
+    for i in range(1):
+      food.visible=False
+      food=create_food()
+  if head.pos.x==-14 or head.pos.x==14 or head.pos.y==-9 or head.pos.y==8:
+    for shape in shapelist:
+      shape.visible=0
+    start = "¤ＧａｍｅＯｖｅｒ¤"
+    lab = label(pos = vec(0,0,2), text = start, font='serif')
+    return False

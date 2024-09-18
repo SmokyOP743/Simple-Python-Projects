@@ -1,0 +1,31 @@
+GlowScript 3.1 VPython
+scene.background=color.black
+scene.width=1000
+scene.height=1000
+scene.title = "Donuts"
+scene.autoscale=0
+scene.pause("Click to proceed")
+a=ring(pos=vector(-4,3,0), axis=vector(0,0,1), radius=1, thickness=.5, texture='https://i.imgur.com/ck8SUnq.jpg')
+b=ring(pos=vector(0,3,0), axis=vector(0,0,1), radius=1, thickness=.5, texture='https://i.imgur.com/Tu5yN8Y.jpg')
+c=ring(pos=vector(4,3,0), axis=vector(0,0,1), radius=1, thickness=.5, texture='https://i.imgur.com/bbtqUeh.jpg')
+d=ring(pos=vector(-4,0,0), axis=vector(0,0,1), radius=1, thickness=.5, texture='https://i.imgur.com/BUf77PC.jpg')
+e=ring(pos=vector(0,0,0), axis=vector(0,0,1), radius=1, thickness=.5, texture='https://i.imgur.com/30QLKNQ.jpg')
+f=ring(pos=vector(4,0,0), axis=vector(0,0,1), radius=1, thickness=.5, texture='https://i.imgur.com/1h1n34u.jpg')
+g=ring(pos=vector(-4,-3,0), axis=vector(0,0,1), radius=1, thickness=.5, texture='https://i.imgur.com/gBZv0Se.jpg')
+h=ring(pos=vector(0,-3,0), axis=vector(0,0,1), radius=1, thickness=.5, texture='https://i.imgur.com/Ldz3OjV.jpg')
+i=ring(pos=vector(4,-3,0), axis=vector(0,0,1), radius=1, thickness=.5, texture='https://i.imgur.com/8gCFpPf.jpg')
+
+def swap(obj1, obj2):
+  temp=obj1.pos
+  obj1.pos = obj2.pos
+  obj2.pos = temp
+
+scene.bind("click",processClick)
+def processClick(ev):
+  m1=scene.mouse.pick
+  scene.unbind("click",processClick)
+  ev=scene.waitfor("click")
+  m2=scene.mouse.pick
+  if m1 and m2:
+    swap(m1,m2)
+  scene.bind("click",processClick)
